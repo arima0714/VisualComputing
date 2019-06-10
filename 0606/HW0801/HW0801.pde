@@ -1,6 +1,6 @@
 //マウスの左クリックのみ実装
 int n = 0;
-float straightLength = 300;
+float straightLength = 100;
 float theta = PI/6;
 
 void setup(){
@@ -10,21 +10,23 @@ void setup(){
     smooth();   
 }
 
-void drawTree(int num, float len, int defX, int defY){
-    line(defX,defY,defX,len);
+void drawReef(int num, float len){
     if(num > 0){
         pushMatrix();
-            translate(defX, len);
             rotate(theta);
-            drawTree(num-1, len/2, 0, 0);
+            line(0,0,0,int(len));
+            translate(0,int(len));
+            drawReef(num-1, len/3 * 2);
         popMatrix();
         pushMatrix();
-            translate(defX, len);
             rotate(theta * -1);
-            drawTree(num-1, len/2, 0, 0);
+            line(0,0,0,int(len));
+            translate(0,int(len));
+            drawReef(num-1, len/3 * 2);
         popMatrix();
     }
 }
+
 void mousePressed(){
     if((mouseButton == LEFT)){
         n++;
@@ -39,6 +41,8 @@ void mousePressed(){
 
 void draw(){
     text("n = " + n, 10, 30);
-    line(width/2, height,width/2, height/2);
-    drawTree(n, straightLength,width/2,height/2);
+    line(width/2, height,width/2, (height/5)*4);
+    translate(width/2, (height/5)*4);
+    rotate(PI);
+    drawReef(n, straightLength);
 }
