@@ -1,0 +1,38 @@
+jjjjjjvoid star(){
+	beginShape();
+	for(int i = 0;i < 5; i++){
+		float theta = 2 * TWO_PI / 5 * i - HALF_PI;
+		vertex(.5 * cos(theta), .5 * sin(theta));
+	}
+	endShape();
+}
+
+void setup(){
+  noStroke();
+
+  size(380 , 200);
+  background(255, 255, 255);
+  //drow red line wid = 200, hei = 30
+  for(int i = 0; i < 13;i++){
+    if(i % 2 == 0){
+    fill(255,0,0);
+    rect(0, 15.5 * i, 380, 15.5);
+    }
+  }
+  //drow blue square top of left
+  float blue_x = 380 / 7 * 3;
+  float blue_y = 15.5 * 7;
+  stroke(0,0,255);
+  fill(0,0,255);
+  rect(0, 0, blue_x , blue_y);
+  noStroke();
+  //drow stars
+  for(int j = 1; j <= 10; j++){
+ 	pushMatrix();
+	fill(255);
+	scale(5,5);
+	translate(200 / 10 * j, 40);
+	scale(5,5);
+ 	popMatrix();
+  }
+}
