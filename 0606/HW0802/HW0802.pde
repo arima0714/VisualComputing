@@ -1,4 +1,5 @@
 //マウスの左クリックのみ実装
+//n=1の時しかできていません
 int n = 0;
 int straightLength = 20;
 
