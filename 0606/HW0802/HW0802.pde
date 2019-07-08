@@ -1,13 +1,24 @@
 //マウスの左クリックのみ実装
-//n=1の時しかできていません
+
+//参考にしたWEBサイト
+//http://obelisk.hatenablog.com/entry/2016/12/24/023408
+//https://happycoding.io/examples/processing/creating-functions/turtle-graphics
+//https://gist.github.com/nataliefreed/8483050
+
 int n = 0;
-int straightLength = 20;
+int straightLength = 5;
+
+float turtleX;
+float turtleY;
+float turtleHeading = 0;
 
 void setup(){
-    size(500,500);
+    size(900,900);
     fill(0);
     background(255);
     smooth();   
+    turtleX = width/2;
+    turtleY = height/2;
 }
 
 void mousePressed(){
@@ -19,7 +30,6 @@ void mousePressed(){
         background(255);
         n = 0;
     }
-    
 }
 
 void drawPeano(int depth, float angle){
@@ -27,7 +37,7 @@ void drawPeano(int depth, float angle){
         return;
     }
     right(angle);
-    drawPeano(depth - 1, 2*angle);
+    drawPeano(depth - 1, -1 * angle);
     forward(straightLength);
     left(angle);
     drawPeano(depth - 1,  angle);
@@ -35,39 +45,43 @@ void drawPeano(int depth, float angle){
     drawPeano(depth - 1,  angle);
     left(angle);
     forward(straightLength);
-    drawPeano(depth - 1, 2*angle);
+    drawPeano(depth - 1, -1 * angle);
     right(angle);
 }
 
 void draw(){
+    // turtleX = width/2;
+    // turtleY = height/2;
+    turtleX = 0 + straightLength;
+    turtleY = 0 + straightLength;
+    background(255);
     text("n = " + n, 10, 30);
-    translate(width/2,height/2);
-    drawPeano(n,PI/2);
+    drawPeano(n, 90);
 }
 
-int positionX=0;
-int positionY=0;
 
 //forward()
-void forward(int x){
-    line(positionX,positionY,positionX,x);
-    positionY = x;
+void forward(int amount){
+    float newX = turtleX + cos(radians(turtleHeading))* amount;
+    float newY = turtleY + sin(radians(turtleHeading))* amount;
 
+    line(turtleX, turtleY, newX, newY);
+    turtleX = newX;
+    turtleY = newY;
 }
 
 void left(float x){
-    translate(positionX, positionY);
-    rotate(PI * -1 / 2);
-    positionX = 0;
-    positionY = 0;
+    rotateTurtle(-1 * x);
 }
 
 void right(float x){
-    translate(positionX, positionY);
-    rotate(PI / 2);
-    positionX = 0;
-    positionY = 0;
+    rotateTurtle(1 * x);
 }
+
+void rotateTurtle(float degrees){
+    turtleHeading += degrees;
+}
+
 //実装する関数
 //forward(int x) : xだけ直線を引く
 //right(float x) : xだけ右回転      //
