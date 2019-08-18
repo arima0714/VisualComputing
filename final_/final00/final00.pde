@@ -12,7 +12,7 @@ int w, h;
 
 void settings() {
     //画像のロード
-  img = loadImage("img2.jpg");
+  img = loadImage("input.jpg");
   //高さと低さの設定
   w = img.width;
   h = img.height;
@@ -26,7 +26,7 @@ void settings() {
 
 void setup() {
   //縦横それぞれwのマージンを残してフィルタを実行
-  for(int num = 0; num < 5; num++){
+  for(int num = 0; num < 2; num++){
     for (int y=W; y<h-W; y++) {
       for (int x=W; x<w-W; x++) {
         color c = bilateral(x, y);
@@ -55,17 +55,21 @@ color bilateral(int i, int j) {
     for (int m=-W; m<=W; m++) {
       color c_ij = k_pixs[i+j*w];
       color c_nm = k_pixs[(i+n)+(j+m)*w];
-      sum_r += gauss(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
-      W_3_r += gauss(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
-      sum_g += gauss(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
-      W_3_g += gauss(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A,B);
-      sum_b += gauss(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A,B)*blue(c_nm);
-      W_3_b += gauss(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A, B);
+      sum_r += h_l(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
+      W_3_r += h_l(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
+      sum_g += h_l(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
+      W_3_g += h_l(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A,B);
+      sum_b += h_l(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A,B)*blue(c_nm);
+      W_3_b += h_l(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A, B);
     }
   }
   return color(sum_r/W_3_r, sum_g/W_3_g, sum_b/W_3_b);
 }
 
-float gauss(float x, float y, float a, float b) {
+float h_l(float x, float y, float a, float b) {
   return exp(-a*x-b*y);
 }
+
+// float h_r(float x, float y, float b){
+//     return exp(-()/());
+// }
