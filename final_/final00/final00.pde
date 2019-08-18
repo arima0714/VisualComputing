@@ -26,7 +26,7 @@ void settings() {
 
 void setup() {
   //縦横それぞれwのマージンを残してフィルタを実行
-  for(int num = 0; num < 2; num++){
+  for(int num = 0; num < 5; num++){
     for (int y=W; y<h-W; y++) {
       for (int x=W; x<w-W; x++) {
         color c = bilateral(x, y);
