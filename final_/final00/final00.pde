@@ -11,7 +11,7 @@ color[] img_bilateral;
 int w, h;
 
 void settings() {
-    //画像のロード
+  //画像のロード
   img = loadImage("input.jpg");
   //高さと低さの設定
   w = img.width;
@@ -39,18 +39,7 @@ void setup() {
   }
 }
 
-void draw() {
-}
-
 color bilateral(int i, int j) {
-  float sum_r = 0.0;
-  float W_3_r = 0.0;
-  float sum_g = 0.0;
-  float W_3_g = 0.0;
-  float sum_b = 0.0;
-  float W_3_b = 0.0;
-  float A = 1 / (sigma_1 * sigma_1);
-  float B = 1 / (sigma_2 * sigma_2);
   float h = .0;
   float g_numer_r = .0;
   float g_numer_g = .0;
@@ -60,23 +49,14 @@ color bilateral(int i, int j) {
     for (int m=-W; m<=W; m++) {
       color c_ij = k_pixs[i+j*w];
       color c_nm = k_pixs[(i+n)+(j+m)*w];
-      h += h_left(m, n) * h_right(i,j,m,n,c_ij,c_nm);
+      h = h_left(m, n) * h_right(i,j,m,n,c_ij,c_nm);
+      g_denom += h;
       g_numer_r += h * red(c_nm);
       g_numer_g += h * green(c_nm);
       g_numer_b += h * blue(c_nm);
-      sum_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
-      W_3_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
-      sum_g += gaussian(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
-      W_3_g += gaussian(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A,B);
-      sum_b += gaussian(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A,B)*blue(c_nm);
-      W_3_b += gaussian(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A, B);
     }
   }
-  return color(sum_r/W_3_r, sum_g/W_3_g, sum_b/W_3_b);
-}
-
-float gaussian(float x, float y, float a, float b) {
-  return exp(-a*x-b*y);
+  return color(g_numer_r/g_denom, g_numer_g/g_denom, g_numer_b/g_denom);
 }
 
 float h_left(float m, float n){
