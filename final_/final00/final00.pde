@@ -55,21 +55,25 @@ color bilateral(int i, int j) {
     for (int m=-W; m<=W; m++) {
       color c_ij = k_pixs[i+j*w];
       color c_nm = k_pixs[(i+n)+(j+m)*w];
-      sum_r += h_l(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
-      W_3_r += h_l(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
-      sum_g += h_l(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
-      W_3_g += h_l(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A,B);
-      sum_b += h_l(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A,B)*blue(c_nm);
-      W_3_b += h_l(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A, B);
+      sum_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
+      W_3_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
+      sum_g += gaussian(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
+      W_3_g += gaussian(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A,B);
+      sum_b += gaussian(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A,B)*blue(c_nm);
+      W_3_b += gaussian(n*n+m*m, pow(blue(c_ij)-blue(c_nm), 2), A, B);
     }
   }
   return color(sum_r/W_3_r, sum_g/W_3_g, sum_b/W_3_b);
 }
 
-float h_l(float x, float y, float a, float b) {
+float gaussian(float x, float y, float a, float b) {
   return exp(-a*x-b*y);
 }
 
-// float h_r(float x, float y, float b){
-//     return exp(-()/());
-// }
+float h_left(float i, float j, float m, float n){
+  return exp(-1 * (m*m + n*n) / (2 * sigma_1*sigma_1));
+}
+
+float h_right(float i, float j, float m, float n, color pix_ij, color pix_nm){
+  return exp(-1 * sq(brightness(pix_ij) - brightness(pix_nm)) / (2 * sigma_2*sigma_2));
+}
