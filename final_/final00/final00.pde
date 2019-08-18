@@ -1,15 +1,29 @@
-// 3x3 画素の平均化フィルタ
-
-int w = 3;
-int hw = w/2;
-float a = 1. / (w*w);
-float[][] averageFilter = {{a,a,a}, {a,a,a}, {a,a,a}};
+int w = 5;
+int hw = int(w/2);
+PImage src;
+float[][] gaussianFilter;
 
 void setup(){
     size(500, 500);
+    background(255);
     PImage src = loadImage("input.jpg");
     image(src, 0, 0);
-    image(filtering(src, averageFilter), src.width,0);
+    gaussianFilter = gaussian(1);
+    image(filtering(src, gaussianFilter), src.width,0);
+}
+
+float[][] gaussian(float s){
+    float[][] filter = new float[w][w];
+    float sum = 0;
+    for(int j = -hw; j <= hw; j++){
+        for(int i = -hw; i <= hw; i++){
+            sum += filter[j+hw][i+hw] = exp(-(i*i + j*j)/2./s/s);
+        }
+    }
+    for(int i = 0; i < w*w;i++){
+        filter[int(i/w)][i%w] /= sum;
+    }
+    return filter;
 }
 
 PImage filtering(PImage img, float f[][]){
