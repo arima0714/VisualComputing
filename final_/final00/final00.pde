@@ -51,10 +51,12 @@ color bilateral(int i, int j) {
   float W_3_b = 0.0;
   float A = 1 / (sigma_1 * sigma_1);
   float B = 1 / (sigma_2 * sigma_2);
+  float h = .0;
   for (int n=-W; n<=W; n++) {
     for (int m=-W; m<=W; m++) {
       color c_ij = k_pixs[i+j*w];
       color c_nm = k_pixs[(i+n)+(j+m)*w];
+      h = h_left(m, n) * h_right(i,j,m,n,c_ij,c_nm);
       sum_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B)*red(c_nm);
       W_3_r += gaussian(n*n+m*m, pow(red(c_ij)-red(c_nm), 2), A, B);
       sum_g += gaussian(n*n+m*m, pow(green(c_ij)-green(c_nm), 2), A, B)*green(c_nm);
@@ -70,7 +72,7 @@ float gaussian(float x, float y, float a, float b) {
   return exp(-a*x-b*y);
 }
 
-float h_left(float i, float j, float m, float n){
+float h_left(float m, float n){
   return exp(-1 * (m*m + n*n) / (2 * sigma_1*sigma_1));
 }
 
